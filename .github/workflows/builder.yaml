@@ -24,10 +24,17 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed_files
-        uses: tj-actions/changed-files@v47
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          changed_files=$(git diff --name-only -z "$BASE_SHA" "$HEAD_SHA" | jq -Rsc 'split("\u0000")[:-1]')
+          echo "all_changed_files=$changed_files" >> "$GITHUB_OUTPUT"
 
       - name: Find app directories
         id: apps
