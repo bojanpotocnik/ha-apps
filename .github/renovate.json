@@ -1,35 +1,27 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "customManagers:dockerfileVersions"
+  ],
   "enabledManagers": ["custom.regex", "dockerfile", "github-actions"],
 
   "semanticCommits": "disabled",
   "labels": ["dependencies"],
 
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "tempio in the example app",
-      "managerFilePatterns": ["/^example/Dockerfile$/"],
-      "matchStrings": ["ARG TEMPIO_VERSION=(?<currentValue>\\S+)"],
-      "depNameTemplate": "home-assistant/tempio",
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "loose"
-    }
-  ],
-
   "packageRules": [
     {
-      "description": "GitHub Actions: weekly, like Dependabot did",
+      "description": "GitHub Actions: weekly with a 7 day cooldown, like Dependabot did",
       "matchManagers": ["github-actions"],
       "addLabels": ["github_actions"],
-      "schedule": ["before 8am on monday"]
+      "schedule": ["before 8am on monday"],
+      "minimumReleaseAge": "7 days"
     },
     {
-      "description": "Leave runner labels and action version inputs alone, Dependabot never updated those",
+      "description": "Leave action version inputs alone, Dependabot never updated those",
       "matchManagers": ["github-actions"],
-      "matchDepTypes": ["github-runner", "uses-with"],
+      "matchDepTypes": ["uses-with"],
       "enabled": false
     },
     {
@@ -40,10 +32,22 @@
       "pinDigests": false
     },
     {
-      "description": "Updates to the example app need a version bump and a changelog entry, which Renovate can't write",
-      "matchFileNames": ["example/**"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/hassio-addons/base"],
+      "groupName": "docker-base",
+      "commitMessageTopic": "hassio-addons/base image",
+      "commitMessageExtra": "to {{newValue}}"
+    },
+    {
+      "description": "Dockerfile ARGs pin image components, so title their PRs \"Update <name> to <version>\"",
+      "matchManagers": ["custom.regex"],
+      "commitMessageTopic": "{{depName}}"
+    },
+    {
+      "description": "Updates to an app image need a version bump and a changelog entry, which Renovate can't write",
+      "matchFileNames": ["*/Dockerfile"],
       "prBodyNotes": [
-        "Before merging, bump `version` in `example/config.yaml` and add a matching entry to `example/CHANGELOG.md`."
+        "To release this update, bump `version` in the app's `config.yaml` and add a matching entry to its `CHANGELOG.md`."
       ]
     }
   ]
