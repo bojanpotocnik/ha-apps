@@ -1,4 +1,4 @@
 # https://contributors.home-assistant.io/apps/guides/repository/#create-the-repository
-name: Example Home Assistant app repository
-url: 'https://github.com/home-assistant/apps-example'
-maintainer: Awesome Maintainer <awesome@example.com>
+name: Home Assistant apps by Bojan Potocnik
+url: https://github.com/bojanpotocnik/ha-apps
+maintainer: Bojan Potocnik <info@bojanpotocnik.com>
