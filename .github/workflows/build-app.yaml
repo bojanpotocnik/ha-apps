@@ -10,11 +10,15 @@ on:
         required: true
         type: boolean
 
+permissions: {}
+
 jobs:
   prepare:
     name: Prepare
     if: github.repository == 'bojanpotocnik/ha-apps'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       architectures: ${{ steps.info.outputs.architectures }}
       build_matrix: ${{ steps.matrix.outputs.matrix }}
@@ -27,6 +31,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Get app information
         id: info

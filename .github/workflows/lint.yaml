@@ -10,15 +10,21 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+permissions: {}
+
 jobs:
   find:
     name: Find apps
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       addons: ${{ steps.addons.outputs.addons_list }}
     steps:
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: 🔍 Find app directories
         id: addons
@@ -28,12 +34,16 @@ jobs:
     name: Lint app ${{ matrix.path }}
     runs-on: ubuntu-latest
     needs: find
+    permissions:
+      contents: read
     strategy:
       matrix:
         path: ${{ fromJson(needs.find.outputs.addons) }}
     steps:
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: 🚀 Run Home Assistant App Lint
         uses: frenck/action-app-linter@479f4f053b96ed00a83ce2c7d8f858e22475aa98 # v2.21.3
