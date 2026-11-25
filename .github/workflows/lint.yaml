@@ -13,6 +13,20 @@ on:
 permissions: {}
 
 jobs:
+  repository:
+    name: Lint repository
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run repository lint
+        run: .github/scripts/lint.sh
+
   find:
     name: Find apps
     runs-on: ubuntu-26.04
@@ -39,7 +53,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        path: ${{ fromJson(needs.find.outputs.addons) }}
+        path: ${{ fromJSON(needs.find.outputs.addons) }}
     steps:
       - name: ⤵️ Check out code from GitHub
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
