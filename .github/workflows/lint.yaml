@@ -34,6 +34,7 @@ jobs:
     name: Lint app ${{ matrix.path }}
     runs-on: ubuntu-26.04
     needs: find
+    if: ${{ needs.find.outputs.addons != '[]' }}
     permissions:
       contents: read
     strategy:
