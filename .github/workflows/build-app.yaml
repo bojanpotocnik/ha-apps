@@ -42,20 +42,36 @@ jobs:
 
       - name: Normalize app information
         id: normalize
+        # Values come from the app config file and are JSON-encoded by the info action.
+        # Pass them via env and decode with jq so they are never parsed as shell code.
+        # Reject multi-line values, which could inject extra step outputs or image labels.
+        env:
+          IMAGE: ${{ steps.info.outputs.image }}
+          VERSION: ${{ steps.info.outputs.version }}
+          NAME: ${{ steps.info.outputs.name }}
+          DESCRIPTION: ${{ steps.info.outputs.description }}
+          URL: ${{ steps.info.outputs.url }}
         run: |
-          image=${{ steps.info.outputs.image }}
-          echo "image_name=${image##*/}" >> "$GITHUB_OUTPUT"
-          echo "registry_prefix=${image%/*}" >> "$GITHUB_OUTPUT"
-          version=${{ steps.info.outputs.version }}
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
-          name=${{ steps.info.outputs.name }}
-          echo "name=${name}" >> "$GITHUB_OUTPUT"
-          description=${{ steps.info.outputs.description }}
-          echo "description=${description}" >> "$GITHUB_OUTPUT"
-          url=${{ steps.info.outputs.url }}
-          if [[ -n "$url" && "$url" != "null" ]]; then
-            echo "url=${url}" >> "$GITHUB_OUTPUT"
-          fi
+          decode() {
+            jq -r 'if . == null then ""
+              elif type == "string" and (test("[\r\n]") | not) then .
+              else error("invalid config value: \(tojson)") end' <<<"$1"
+          }
+          image=$(decode "$IMAGE")
+          version=$(decode "$VERSION")
+          name=$(decode "$NAME")
+          description=$(decode "$DESCRIPTION")
+          url=$(decode "$URL")
+          {
+            echo "image_name=${image##*/}"
+            echo "registry_prefix=${image%/*}"
+            echo "version=${version}"
+            echo "name=${name}"
+            echo "description=${description}"
+            if [[ -n "$url" ]]; then
+              echo "url=${url}"
+            fi
+          } >> "$GITHUB_OUTPUT"
 
       - name: Prepare build matrix
         id: matrix
