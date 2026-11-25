@@ -92,3 +92,13 @@ jobs:
       app: ${{ matrix.app }}
       publish: ${{ github.event_name == 'push' }}
     secrets: inherit
+
+  result:
+    name: Build result
+    runs-on: ubuntu-26.04
+    needs: [init, build-app]
+    if: always()
+    steps:
+      - name: Fail if any build job failed
+        if: always() && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled'))
+        run: exit 1
