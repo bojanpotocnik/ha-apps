@@ -16,7 +16,7 @@ permissions: {}
 jobs:
   init:
     name: Initialize builds
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     outputs:

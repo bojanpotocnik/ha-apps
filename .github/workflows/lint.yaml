@@ -15,7 +15,7 @@ permissions: {}
 jobs:
   find:
     name: Find apps
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     permissions:
       contents: read
     outputs:
@@ -32,7 +32,7 @@ jobs:
 
   lint:
     name: Lint app ${{ matrix.path }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: find
     permissions:
       contents: read
