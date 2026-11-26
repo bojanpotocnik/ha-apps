@@ -31,28 +31,28 @@ if bashio::config.has_value 'log_level'; then
 fi
 
 taptap_modules=""
-if $(bashio::config.has_value 'taptap_modules'); then
+if bashio::config.has_value 'taptap_modules'; then
     for module in $(bashio::config 'taptap_modules'); do
         taptap_modules+=$module","
     done
 fi
 
 ha_nodes_sensors_recorder=""
-if $(bashio::config.has_value 'ha_nodes_sensors_recorder'); then
+if bashio::config.has_value 'ha_nodes_sensors_recorder'; then
     for sensor in $(bashio::config 'ha_nodes_sensors_recorder'); do
         ha_nodes_sensors_recorder+=$sensor","
     done
 fi
 
 ha_strings_sensors_recorder=""
-if $(bashio::config.has_value 'ha_strings_sensors_recorder'); then
+if bashio::config.has_value 'ha_strings_sensors_recorder'; then
     for sensor in $(bashio::config 'ha_strings_sensors_recorder'); do
         ha_strings_sensors_recorder+=$sensor","
     done
 fi
 
 ha_stats_sensors_recorder=""
-if $(bashio::config.has_value 'ha_stats_sensors_recorder'); then
+if bashio::config.has_value 'ha_stats_sensors_recorder'; then
     for sensor in $(bashio::config 'ha_stats_sensors_recorder'); do
         ha_stats_sensors_recorder+=$sensor","
     done
