@@ -2,8 +2,6 @@
 
 # Define build arguments with defaults (from build.yaml)
 ARG BUILD_ARCH="amd64"
-ARG BUILD_REPO="litinoveweedle/hassio-addons-dev"
-ARG BUILD_DESCRIPTION="hassio taptap addon"
 # renovate: datasource=github-releases depName=taptap packageName=litinoveweedle/taptap versioning=semver
 ARG TAPTAP_VERSION="0.2.6"
 # renovate: datasource=github-releases depName=taptap-mqtt packageName=litinoveweedle/taptap-mqtt versioning=semver
@@ -15,12 +13,6 @@ FROM ghcr.io/hassio-addons/base/${BUILD_ARCH}:20.1.0
 
 # Bring build arguments into the build context
 ARG BUILD_ARCH
-ARG BUILD_DATE
-ARG BUILD_DESCRIPTION
-ARG BUILD_NAME
-ARG BUILD_REF
-ARG BUILD_REPO
-ARG BUILD_VERSION
 ARG TAPTAP_VERSION
 ARG TAPTAP_MQTT_VERSION
 
@@ -65,19 +57,12 @@ RUN chmod 775 /etc
 
 # Labels
 LABEL \
-    io.hass.name="${BUILD_NAME}" \
-    io.hass.description="${BUILD_DESCRIPTION}" \
-    io.hass.arch="${BUILD_ARCH}" \
-    io.hass.type="addon" \
-    io.hass.version=${BUILD_VERSION} \
-    maintainer="Dominik Strnad <litinoveweedle@gmail.com>" \
-    org.opencontainers.image.title="${BUILD_NAME}" \
-    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
-    org.opencontainers.image.authors="Dominik Strnad <litinoveweedle@gmail.com>" \
+    org.opencontainers.image.title="Home Assistant App: TapTap" \
+    org.opencontainers.image.description="Tigo CCA to HomeAssistant MQTT bridge" \
+    org.opencontainers.image.source="https://github.com/bojanpotocnik/ha-apps" \
     org.opencontainers.image.licenses="Apache 2.0" \
-    org.opencontainers.image.url="https://github.com/${BUILD_REPO}" \
-    org.opencontainers.image.source="https://github.com/${BUILD_REPO}" \
-    org.opencontainers.image.documentation="https://github.com/${BUILD_REPO}/blob/main/README.md" \
-    org.opencontainers.image.created=${BUILD_DATE} \
-    org.opencontainers.image.revision=${BUILD_REF} \
-    org.opencontainers.image.version=${BUILD_VERSION}
+    org.opencontainers.image.authors="Dominik Strnad <litinoveweedle@gmail.com>, Bojan Potocnik <info@bojanpotocnik.com>" \
+    org.opencontainers.image.url="https://github.com/bojanpotocnik/ha-apps" \
+    org.opencontainers.image.documentation="https://github.com/bojanpotocnik/ha-apps/blob/main/taptap/DOCS.md" \
+    org.opencontainers.image.vendor="Home Assistant apps by Bojan Potocnik" \
+    maintainer="Bojan Potocnik <info@bojanpotocnik.com>"
