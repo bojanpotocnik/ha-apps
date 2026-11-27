@@ -6,7 +6,19 @@
 
 ## Apps
 
-No apps are published yet.
+### TapTap - Local Tigo CCA to Home Assistant MQTT bridge
+
+This app reads Tigo optimizer data locally by listening to the RS-485 bus communication
+between the Tigo CCA and TAP, and publishes it to Home Assistant via MQTT.
+
+It was created by Dominik Strnad ([@litinoveweedle](https://github.com/litinoveweedle))
+in [litinoveweedle/hassio-addons](https://github.com/litinoveweedle/hassio-addons).
+That repository was archived on 2026-11-21 and has no known active successor,
+so this repository maintains the app from here. It was imported unchanged from
+upstream commit
+[096aa2f](https://github.com/litinoveweedle/hassio-addons/tree/096aa2f1a3701e2a32bd946ecc243fab8c505794/taptap)
+as version 0.3.4. Releases here continue from that version. Upstream is
+licensed under Apache-2.0, the same as this repository.
 
 ## Contributing
 
