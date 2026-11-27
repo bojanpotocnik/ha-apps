@@ -1,0 +1,32 @@
+name: Release reminder
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  issues:
+    name: Track unreleased app changes
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Update unreleased changes issues
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/release-reminder.sh issues
